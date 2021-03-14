@@ -189,5 +189,5 @@ void EEPROM_PageErase (uint16_t page)
 	// write the data to the EEPROM
 	HAL_I2C_Mem_Write(EEPROM_I2C, EEPROM_ADDR, MemAddress, 2, data, PAGE_SIZE, 1000);
 
-	HAL_Delay (5);  // write cycle delay
+	HAL_Delay (5);  // write cycle delay 
 }
