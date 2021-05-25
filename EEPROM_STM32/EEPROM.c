@@ -78,7 +78,7 @@ void EEPROM_Write (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
 		startPage += 1;  // increment the page, so that a new page address can be selected for further write
 		offset=0;   // since we will be writing to a new page, so offset will be 0
 		size = size-bytesremaining;  // reduce the size of the bytes
-		pos = bytesremaining;  // update the position for the data buffer
+		pos += bytesremaining;  // update the position for the data buffer
 
 		HAL_Delay (5);  // Write cycle delay (5ms)
 	}
