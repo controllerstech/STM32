@@ -168,7 +168,7 @@ void EEPROM_Read (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
 		startPage += 1;
 		offset=0;
 		size = size-bytesremaining;
-		pos = bytesremaining;
+		pos += bytesremaining;
 	}
 }
 
