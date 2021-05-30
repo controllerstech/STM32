@@ -24,7 +24,9 @@
  * Some STM32F103C8 have 64 KB FLASH Memory, so I guess they have Page 0 to Page 63 only.
  */
 
-// Get the Page number
+/* Get the Page number
+   Replace 1024 with the PAGE SIZE in your MCU
+*/   
 static uint32_t GetPage(uint32_t Address)
 {
   for (int indx=0; indx<128; indx++)
