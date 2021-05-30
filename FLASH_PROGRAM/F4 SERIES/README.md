@@ -2,6 +2,7 @@
 
 
 1. Rewrite the Sectors according to your reference manual
+2. Do not program the initial addresses (around 0x08000000). This is where the program is stored.
 
 ## Always Refer to the manual, as some sectors are write protected.
 
