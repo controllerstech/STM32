@@ -24,16 +24,14 @@
  * Some STM32F103C8 have 64 KB FLASH Memory, so I guess they have Page 0 to Page 63 only.
  */
 
-/* Get the Page number
-   Replace 1024 with the PAGE SIZE in your MCU
-*/   
+/* FLASH_PAGE_SIZE should be able to get the size of the Page according to the controller */
 static uint32_t GetPage(uint32_t Address)
 {
   for (int indx=0; indx<128; indx++)
   {
-	  if((Address < (0x08000000 + (1024 *(indx+1))) ) && (Address >= (0x08000000 + 1024*indx)))
+	  if((Address < (0x08000000 + (FLASH_PAGE_SIZE *(indx+1))) ) && (Address >= (0x08000000 + FLASH_PAGE_SIZE*indx)))
 	  {
-		  return (0x08000000 + 1024*indx);
+		  return (0x08000000 + FLASH_PAGE_SIZE*indx);
 	  }
   }
 
