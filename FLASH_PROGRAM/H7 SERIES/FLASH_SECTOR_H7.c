@@ -275,25 +275,15 @@ void Convert_To_Str (uint32_t *Data, char *Buf)
 	}
 }
 
-/*Write the Float/Integer values to the EEPROM
- * @page is the number of the start page. Range from 0 to PAGE_NUM-1
- * @offset is the start byte offset in the page. Range from 0 to PAGE_SIZE-1
- * @data is the float/integer value that you want to write
- */
 
-void Flash_Write_NUM (uint32_t StartSectorAddress, float data)
+void Flash_Write_NUM (uint32_t StartSectorAddress, float Num)
 {
 
-	float2Bytes(bytes_temp, data);
+	float2Bytes(bytes_temp, Num);
 
 	Flash_Write_Data (StartSectorAddress, (uint32_t *)bytes_temp, 1);
 }
 
-/* Reads the single Float/Integer values from the EEPROM
- * @page is the number of the start page. Range from 0 to PAGE_NUM-1
- * @offset is the start byte offset in the page. Range from 0 to PAGE_SIZE-1
- * @returns the float/integer value
- */
 
 float Flash_Read_NUM (uint32_t StartSectorAddress)
 {
