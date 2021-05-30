@@ -25,38 +25,13 @@
 #include "stdio.h"
 
 
-uint8_t bytes_temp[4];
+// If using STM32H7Ax/BX Series, uncomment the line below
+//#define FLASHWORD 		4
+
+// If using any other STM32H7 Series, uncomment the line below
+#define FLASHWORD		8
 
 
-void float2Bytes(uint8_t * ftoa_bytes_temp,float float_variable)
-{
-    union {
-      float a;
-      uint8_t bytes[4];
-    } thing;
-
-    thing.a = float_variable;
-
-    for (uint8_t i = 0; i < 4; i++) {
-      ftoa_bytes_temp[i] = thing.bytes[i];
-    }
-
-}
-
-float Bytes2float(uint8_t * ftoa_bytes_temp)
-{
-    union {
-      float a;
-      uint8_t bytes[4];
-    } thing;
-
-    for (uint8_t i = 0; i < 4; i++) {
-    	thing.bytes[i] = ftoa_bytes_temp[i];
-    }
-
-   float float_variable =  thing.a;
-   return float_variable;
-}
 
 
 // There are 2 BANKS available for H745, BANK 1 (0x0800 0000 - 0x080F FFFF) and BANK 2 (0x0810 0000 - 0x080F FFFF)
@@ -153,6 +128,59 @@ static uint32_t GetSector(uint32_t Address)
   return sector;
 }
 
+
+/* Some Controllers like STM32H7Ax have 128 sectors. It's not possible to write each one of them here.
+   You can come up with easier ways to set the sector numbers. FOR EXAMPLE
+
+static uint32_t GetSector(uint32_t Address)
+{
+  uint16_t address = Address-0x08000000;
+  int mentissa = address/8192;  // Each Sector is 8 KB
+
+  return mentissa;
+}
+
+*/
+
+
+
+
+uint8_t bytes_temp[4];
+
+
+void float2Bytes(uint8_t * ftoa_bytes_temp,float float_variable)
+{
+    union {
+      float a;
+      uint8_t bytes[4];
+    } thing;
+
+    thing.a = float_variable;
+
+    for (uint8_t i = 0; i < 4; i++) {
+      ftoa_bytes_temp[i] = thing.bytes[i];
+    }
+
+}
+
+float Bytes2float(uint8_t * ftoa_bytes_temp)
+{
+    union {
+      float a;
+      uint8_t bytes[4];
+    } thing;
+
+    for (uint8_t i = 0; i < 4; i++) {
+    	thing.bytes[i] = ftoa_bytes_temp[i];
+    }
+
+   float float_variable =  thing.a;
+   return float_variable;
+}
+
+
+
+
 /* The DATA to be written here MUST be according to the List Shown Below
 
 For EXAMPLE:- For H74x/5x, a single data must be 8 numbers of 32 bits word
@@ -207,8 +235,8 @@ uint32_t Flash_Write_Data (uint32_t StartSectorAddress, uint32_t *data, uint16_t
 	   {
 	     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_FLASHWORD, StartSectorAddress, (uint32_t ) &data[sofar]) == HAL_OK)
 	     {
-	    	 StartSectorAddress += 4*8;  //
-	    	 sofar+=8;
+	    	 StartSectorAddress += 4*FLASHWORD;  //
+	    	 sofar+=FLASHWORD;
 	     }
 	     else
 	     {
