@@ -10,15 +10,15 @@
 #include "uartRingBufDMA.h"
 #include "string.h"
 
-extern UART_HandleTypeDef huart1;
-extern DMA_HandleTypeDef hdma_usart1_rx;
+extern UART_HandleTypeDef huart2;
+extern DMA_HandleTypeDef hdma_usart2_rx;
 
-#define UART huart1
-#define DMA hdma_usart1_rx
+#define UART huart2
+#define DMA hdma_usart2_rx
 
 /* Define the Size Here */
-#define RxBuf_SIZE 512
-#define MainBuf_SIZE 1024
+#define RxBuf_SIZE 20
+#define MainBuf_SIZE 40
 
 uint8_t RxBuf[RxBuf_SIZE];
 uint8_t MainBuf[MainBuf_SIZE];
@@ -45,8 +45,8 @@ void Ringbuf_Init (void)
 	oldPos = 0;
 	newPos = 0;
 
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, RxBuf, RxBuf_SIZE);
-  __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+  HAL_UARTEx_ReceiveToIdle_DMA(&UART, RxBuf, RxBuf_SIZE);
+  __HAL_DMA_DISABLE_IT(&DMA, DMA_IT_HT);
 }
 
 /* Resets the Ring buffer */
@@ -129,12 +129,13 @@ int waitFor (char *string, uint32_t Timeout)
 	TIMEOUT = Timeout;
 
 	while ((!isDataAvailable)&&TIMEOUT);  // let's wait for the data to show up
+	isDataAvailable = 0;
 
 again:
 
 	/* If the data doesn't show up, then return 0 */
 	if (TIMEOUT <= 0) return 0;
-	isDataAvailable = 0;
+
 
 	/* if the incoming data does not match with the string, we will simply increment the index
 	 * And wait for the string to arrive in the incoming data
@@ -162,7 +163,21 @@ again:
 		if (so_far == len) return 1;
 	}
 
-	if (so_far != len)
+//	if (so_far != len)
+//	{
+//		so_far = 0;
+//		goto again;
+//	}
+
+	HAL_Delay (100);
+
+	if ((so_far!=len)&&isDataAvailable)
+	{
+		isDataAvailable = 0;
+//		so_far = 0;
+		goto again;
+	}
+	else
 	{
 		so_far = 0;
 		goto again;
@@ -186,7 +201,8 @@ int copyUpto (char *string, char *buffertocopyinto, uint32_t Timeout)
 	int indx = 0;
 
 	TIMEOUT = Timeout;
-
+	while ((!isDataAvailable)&&TIMEOUT);
+	isDataAvailable = 0;
 again:
 
 	if (TIMEOUT<=0) return 0;
@@ -213,7 +229,15 @@ again:
 		if (so_far == len) return 1;
 	}
 
-	if (so_far != len)
+	HAL_Delay (100);
+
+	if ((so_far!=len)&&isDataAvailable)
+	{
+		isDataAvailable = 0;
+//		so_far = 0;
+		goto again;
+	}
+	else
 	{
 		so_far = 0;
 		goto again;
@@ -230,8 +254,9 @@ again:
 int getAfter (char *string, uint8_t numberofchars, char *buffertocopyinto, uint32_t Timeout)
 {
 	if ((waitFor(string, Timeout)) != 1) return 0;
-	TIMEOUT = Timeout/3;
-	while (TIMEOUT > 0);
+//	TIMEOUT = Timeout/3;
+//	while (TIMEOUT > 0);
+	HAL_Delay (100);
 	for (int indx=0; indx<numberofchars; indx++)
 	{
 		if (Tail==MainBuf_SIZE) Tail = 0;
