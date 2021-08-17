@@ -10,15 +10,15 @@
 #include "uartRingBufDMA.h"
 #include "string.h"
 
-extern UART_HandleTypeDef huart2;
-extern DMA_HandleTypeDef hdma_usart2_rx;
+extern UART_HandleTypeDef huart1;
+extern DMA_HandleTypeDef hdma_usart1_rx;
 
-#define UART huart2
-#define DMA hdma_usart2_rx
+#define UART huart1
+#define DMA hdma_usart1_rx
 
 /* Define the Size Here */
-#define RxBuf_SIZE 20
-#define MainBuf_SIZE 40
+#define RxBuf_SIZE 512
+#define MainBuf_SIZE 1024
 
 uint8_t RxBuf[RxBuf_SIZE];
 uint8_t MainBuf[MainBuf_SIZE];
@@ -128,7 +128,7 @@ int waitFor (char *string, uint32_t Timeout)
 
 	TIMEOUT = Timeout;
 
-	while ((!isDataAvailable)&&TIMEOUT);  // let's wait for the data to show up
+	while ((Tail==Head)&&TIMEOUT);  // let's wait for the data to show up
 	isDataAvailable = 0;
 
 again:
@@ -201,7 +201,7 @@ int copyUpto (char *string, char *buffertocopyinto, uint32_t Timeout)
 	int indx = 0;
 
 	TIMEOUT = Timeout;
-	while ((!isDataAvailable)&&TIMEOUT);
+	while ((Tail==Head)&&TIMEOUT);
 	isDataAvailable = 0;
 again:
 
