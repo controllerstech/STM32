@@ -10,15 +10,15 @@
 #include "uartRingBufDMA.h"
 #include "string.h"
 
-extern UART_HandleTypeDef huart1;
-extern DMA_HandleTypeDef hdma_usart1_rx;
+extern UART_HandleTypeDef huart2;
+extern DMA_HandleTypeDef hdma_usart2_rx;
 
-#define UART huart1
-#define DMA hdma_usart1_rx
+#define UART huart2
+#define DMA hdma_usart2_rx
 
 /* Define the Size Here */
-#define RxBuf_SIZE 512
-#define MainBuf_SIZE 1024
+#define RxBuf_SIZE 20
+#define MainBuf_SIZE 40
 
 uint8_t RxBuf[RxBuf_SIZE];
 uint8_t MainBuf[MainBuf_SIZE];
