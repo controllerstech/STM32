@@ -11,4 +11,4 @@
 ### CORTEX M7 Users needs to be careful about memory management. You can check out the video series on the same below 
 https://www.youtube.com/playlist?list=PLfIJKC1ud8gjoY2McCCqkxXWuwiC2iSap
 
-## I will soon Release a Video on this Topic
+## Check out the Video on Usage and application https://youtu.be/ly3_JEC_d9w
