@@ -39,10 +39,10 @@ void MX_QUADSPI_Init(void)
   /* USER CODE END QUADSPI_Init 1 */
   hqspi.Instance = QUADSPI;
   hqspi.Init.ClockPrescaler = 1;
-  hqspi.Init.FifoThreshold = 1;
+  hqspi.Init.FifoThreshold = 4;
   hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
-  hqspi.Init.FlashSize = 26;
-  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_3_CYCLE;
+  hqspi.Init.FlashSize = 25;
+  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_6_CYCLE;
   hqspi.Init.ClockMode = QSPI_CLOCK_MODE_0;
   hqspi.Init.DualFlash = QSPI_DUALFLASH_DISABLE;
   if (HAL_QSPI_Init(&hqspi) != HAL_OK)
@@ -189,7 +189,7 @@ static int32_t QSPI_EraseChip(uint32_t Instance);
 static int32_t QSPI_EnableMemoryMappedMode(uint32_t Instance);
 static int32_t QSPI_DisableMemoryMappedMode(uint32_t Instance);
 static int32_t QSPI_ConfigFlash(uint32_t Instance, QSPI_Interface_t Mode, QSPI_Transfer_t Rate);
-static HAL_StatusTypeDef PMX_QSPI_Init(QSPI_HandleTypeDef *hQspi, MX_QSPI_Init_t *Config);
+//static HAL_StatusTypeDef PMX_QSPI_Init(QSPI_HandleTypeDef *hQspi, MX_QSPI_Init_t *Config);
 
 
 
@@ -202,13 +202,15 @@ static int32_t QSPI_DummyCyclesCfg(uint32_t Instance, QSPI_Interface_t Mode);
 int32_t QSPI_Init(uint32_t Instance, QSPI_Init_t *Init)
 {
   int32_t ret = HAL_OK;
-  QSPI_Info_t pInfo;
-  MX_QSPI_Init_t qspi_init;
+//  QSPI_Info_t pInfo;
+//  MX_QSPI_Init_t qspi_init;
+
   /* Table to handle clock prescalers:
   1: For STR mode to reach max 108Mhz
   3: For DTR mode to reach max 54Mhz
   */
-  static const uint32_t PrescalerTab[2] = {1, 3};
+
+//  static const uint32_t PrescalerTab[2] = {1, 3};
 
   /* Check if the instance is supported */
   if(Instance >= QSPI_INSTANCES_NUMBER)
@@ -226,20 +228,22 @@ int32_t QSPI_Init(uint32_t Instance, QSPI_Init_t *Init)
       if(ret == HAL_OK)
       {
         /* STM32 QSPI interface initialization */
-        (void)MT25TL01G_GetFlashInfo(&pInfo);
-        qspi_init.ClockPrescaler = PrescalerTab[Init->TransferRate];
-        qspi_init.DualFlashMode  = Init->DualFlashMode;
-        uint32_t Flashsize = (Init->DualFlashMode == QSPI_DUALFLASH_ENABLE) ? (uint32_t)pInfo.FlashSize : (uint32_t)pInfo.FlashSize/2;
-        qspi_init.FlashSize      = (uint32_t)POSITION_VAL(Flashsize) - 1U;
-        qspi_init.SampleShifting = (Init->TransferRate == QSPI_STR_TRANSFER) ? QSPI_SAMPLE_SHIFTING_HALFCYCLE : QSPI_SAMPLE_SHIFTING_NONE;
+//        (void)MT25TL01G_GetFlashInfo(&pInfo);
+//        qspi_init.ClockPrescaler = PrescalerTab[Init->TransferRate];
+//        qspi_init.DualFlashMode  = Init->DualFlashMode;
+//        uint32_t Flashsize = (Init->DualFlashMode == QSPI_DUALFLASH_ENABLE) ? (uint32_t)pInfo.FlashSize : (uint32_t)pInfo.FlashSize/2;
+//        qspi_init.FlashSize      = (uint32_t)POSITION_VAL(Flashsize) - 1U;
+//        qspi_init.SampleShifting = (Init->TransferRate == QSPI_STR_TRANSFER) ? QSPI_SAMPLE_SHIFTING_HALFCYCLE : QSPI_SAMPLE_SHIFTING_NONE;
+//
+//        if(PMX_QSPI_Init(&hqspi, &qspi_init) != HAL_OK)
+//        {
+//          ret = HAL_ERROR;
+//        }
 
-        if(PMX_QSPI_Init(&hqspi, &qspi_init) != HAL_OK)
-        {
-          ret = HAL_ERROR;
-        }
+    	MX_QUADSPI_Init ();
 
         /* QSPI memory reset */
-        else if(QSPI_ResetMemory(Instance) != HAL_OK)
+        if(QSPI_ResetMemory(Instance) != HAL_OK)
         {
           ret = HAL_ERROR;
         }
@@ -319,22 +323,22 @@ int32_t QSPI_DeInit(uint32_t Instance)
   return ret;
 }
 
-HAL_StatusTypeDef PMX_QSPI_Init(QSPI_HandleTypeDef *hQspi, MX_QSPI_Init_t *Config)
-{
-  /* QSPI initialization */
-  /* QSPI freq = SYSCLK /(1 + ClockPrescaler) Mhz */
-  hQspi->Instance                = QUADSPI;
-  hQspi->Init.ClockPrescaler     = Config->ClockPrescaler;
-  hQspi->Init.FifoThreshold      = 1;
-  hQspi->Init.SampleShifting     = Config->SampleShifting;
-  hQspi->Init.FlashSize          = Config->FlashSize;
-  hQspi->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_4_CYCLE; /* Min 50ns for nonRead */
-  hQspi->Init.ClockMode          = QSPI_CLOCK_MODE_0;
-  hQspi->Init.FlashID            = QSPI_FLASH_ID_1;
-  hQspi->Init.DualFlash          = Config->DualFlashMode;
-
-  return HAL_QSPI_Init(hQspi);
-}
+//HAL_StatusTypeDef PMX_QSPI_Init(QSPI_HandleTypeDef *hQspi, MX_QSPI_Init_t *Config)
+//{
+//  /* QSPI initialization */
+//  /* QSPI freq = SYSCLK /(1 + ClockPrescaler) Mhz */
+//  hQspi->Instance                = QUADSPI;
+//  hQspi->Init.ClockPrescaler     = Config->ClockPrescaler;
+//  hQspi->Init.FifoThreshold      = 4;
+//  hQspi->Init.SampleShifting     = Config->SampleShifting;
+//  hQspi->Init.FlashSize          = Config->FlashSize;
+//  hQspi->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_6_CYCLE; /* Min 50ns for nonRead */
+//  hQspi->Init.ClockMode          = QSPI_CLOCK_MODE_0;
+//  hQspi->Init.FlashID            = QSPI_FLASH_ID_1;
+//  hQspi->Init.DualFlash          = Config->DualFlashMode;
+//
+//  return HAL_QSPI_Init(hQspi);
+//}
 
 int32_t QSPI_Read(uint32_t Instance, uint8_t *pData, uint32_t ReadAddr, uint32_t Size)
 {
