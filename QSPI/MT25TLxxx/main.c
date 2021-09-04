@@ -61,7 +61,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 uint8_t buf[] = "hello world from QSPI! This is a test to see if the Data is being written to the QSPI.";
-uint8_t Rxbuf[40];
+uint8_t Rxbuf[100];
 
 /* USER CODE END 0 */
 
@@ -146,17 +146,15 @@ HSEM notification */
 	  Error_Handler();
   }
 
-  if (CSP_QSPI_WriteMemory(buf, 0x3ffff10, strlen ((char *)buf)) != HAL_OK)
+  if (CSP_QSPI_WriteMemory(buf, 0, strlen ((char *)buf)) != HAL_OK)
   {
 	  Error_Handler();
   }
 
-  if (CSP_QSPI_EnableMemoryMappedMode() != HAL_OK)
+  if (CSP_QSPI_Read(Rxbuf, 0, 100) != HAL_OK)
   {
 	  Error_Handler();
   }
-
-  memcpy(Rxbuf, (uint32_t *) 0x90000000, 40);
 
 
   /* USER CODE END 2 */
