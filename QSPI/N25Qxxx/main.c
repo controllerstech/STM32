@@ -9,10 +9,10 @@
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,11 +57,12 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint8_t *data = "HELLO WORLD FROM QSPI!";
+uint8_t *writebuf = "Hello world from QSPI !";
 
-uint32_t var = 0;
+uint8_t readbuf[100];
 
-uint8_t buffer[100];
+uint16_t number = 1234;
+uint8_t buf[5];
 
 /* USER CODE END 0 */
 
@@ -111,17 +113,15 @@ int main(void)
 	  Error_Handler();
   }
 
-  if (CSP_QSPI_Write(data, 0, 22) != HAL_OK)
+
+  sprintf (buf, "%u", number);
+  if (CSP_QSPI_Write(buf, 0, strlen (buf)) != HAL_OK)
   {
 	  Error_Handler();
   }
 
-//  if (CSP_QSPI_EnableMemoryMappedMode() != HAL_OK)
-//  {
-//	  Error_Handler();
-//  }
 
-  if (CSP_QSPI_Read(buffer, 0, 100) != HAL_OK)
+  if (CSP_QSPI_Read(readbuf, 0, 100) != HAL_OK)
   {
 	  Error_Handler();
   }
@@ -162,7 +162,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 25;
   RCC_OscInitStruct.PLL.PLLN = 432;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 9;
+  RCC_OscInitStruct.PLL.PLLQ = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
