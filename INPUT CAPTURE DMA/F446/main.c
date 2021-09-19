@@ -62,17 +62,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint16_t pwmData[12];
-
-int isfinished = 0;
-
-void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
-{
-	TIM1->CCR1 = 0;
-	isfinished = 1;
-}
-
-
 /**************** PWM INPUT **************/
 
 #define TIMCLOCK   90000000
@@ -260,8 +249,9 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   TIM1->CCR1 = 5;
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  
 
 
   HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, riseData, numval);
