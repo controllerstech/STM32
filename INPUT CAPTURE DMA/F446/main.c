@@ -64,12 +64,19 @@ static void MX_TIM2_Init(void);
 
 /**************** PWM INPUT **************/
 
+/* define the capturing TIMER's CLOCK and the Prescalar you are using */ 
 #define TIMCLOCK   90000000
 #define PSCALAR    0
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
 
+/* Define the number of samples to be taken by the DMA 
+   For lower Frequencies, keep the less number for samples 
+*/
 #define numval   500
+
+
+
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 int riseCaptured = 0;
 int fallCaptured = 0;
@@ -249,13 +256,16 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+/* The PWM Output from Timer 1 */
   TIM1->CCR1 = 5;
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   
 
-
+/* TIM2 Channel 1 is set to rising edge, so it will store the data in 'riseData' */
   HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, riseData, numval);
 
+	
+/* TIM2 Channel 2 is set to falling edge, so it will store the data in 'fallData' */
   HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_2, fallData, numval);
 
 
@@ -272,6 +282,7 @@ int main(void)
 
 	  HAL_Delay (1000);
 
+/* Call the measurement whenever needed */
 	  if (isMeasured)
 	  {
 		  TIM2->CNT = 0;
