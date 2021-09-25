@@ -424,7 +424,7 @@ uint8_t CSP_QSPI_EnableMemoryMappedMode(void)
     sCommand.DataMode = QSPI_DATA_4_LINES;
     sCommand.NbData = 0;
     sCommand.Address = 0;
-    sCommand.Instruction = QUAD_OUT_FAST_READ_CMD;
+    sCommand.Instruction = QUAD_INOUT_FAST_READ_CMD;
     sCommand.DummyCycles = N25Q128A_DUMMY_CYCLES_READ_QUAD;
 
     sMemMappedCfg.TimeOutActivation = QSPI_TIMEOUT_COUNTER_DISABLE;
