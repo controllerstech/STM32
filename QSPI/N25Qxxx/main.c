@@ -64,6 +64,17 @@ uint8_t readbuf[100];
 uint16_t number = 1234;
 uint8_t buf[5];
 
+
+
+/************************ FOR EXT MEM BOOT **********************/
+
+typedef  void (*pFunction)(void);
+pFunction JumpToApplication;
+
+#define APPLICATION_ADDRESS 0x90000000
+
+/****************************************************************/
+
 /* USER CODE END 0 */
 
 /**
@@ -108,6 +119,8 @@ int main(void)
 	  Error_Handler();
   }
 
+	
+/****************** FOR SIMPLE WRITE READ ********************/	
   if (CSP_QSPI_Erase_Chip() != HAL_OK)
   {
 	  Error_Handler();
@@ -126,6 +139,34 @@ int main(void)
 	  Error_Handler();
   }
 
+/*************************************************/
+	
+	
+/***********************  FOR EXT MEM BOOT *************************/
+	
+  if (CSP_QSPI_EnableMemoryMappedMode() != HAL_OK)
+  {
+	  Error_Handler();
+  }
+
+
+  // Disable the cache	
+  SCB_DisableDCache();
+  SCB_DisableICache();
+
+  
+  // Disable the systick interrupt	
+  SysTick->CTRL = 0;
+
+
+  /* Initialize user application's Stack Pointer & Jump to user application */
+  JumpToApplication = (pFunction) (*(__IO uint32_t*) (APPLICATION_ADDRESS + 4));  // Reset Handler
+  __set_MSP(*(__IO uint32_t*) APPLICATION_ADDRESS);   // stack pointer
+  JumpToApplication();	  // make the jump
+	
+/*****************************************************/
+	
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
