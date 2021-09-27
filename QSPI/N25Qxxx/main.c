@@ -121,6 +121,8 @@ int main(void)
 
 	
 /****************** FOR SIMPLE WRITE READ ********************/	
+	// Comment out these if you are using the EXT MEM BOOT
+	
   if (CSP_QSPI_Erase_Chip() != HAL_OK)
   {
 	  Error_Handler();
@@ -143,6 +145,7 @@ int main(void)
 	
 	
 /***********************  FOR EXT MEM BOOT *************************/
+	// Comment out these if you are using the simple Read Write
 	
   if (CSP_QSPI_EnableMemoryMappedMode() != HAL_OK)
   {
