@@ -9,4 +9,4 @@ Follow the Configuration in the .IOC file
 Copy the code from the Main.c file
 
 
-Video will be coming soon
+## Watch the Video https://youtu.be/qqzZ9C0umQ4
