@@ -20,3 +20,6 @@
    Click scan, select the board, and click apply
    
 6. The Application will run from the External memory now.   
+
+
+## Check out the Respective files if you don't understand the steps. Also check the .ioc file for the MPU Configuration
