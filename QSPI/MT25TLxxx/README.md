@@ -15,7 +15,7 @@ To make it work for 512 Mb Flash, follow the steps below
 __________________________________________________________________________________________________________________
 
 
-# How to configure MT25 in the mmeory mapped mode 
+# How to configure MT25 in the memory mapped mode 
 
 The steps are commented out in the main file itself
 
