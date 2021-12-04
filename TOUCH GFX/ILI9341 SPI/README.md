@@ -14,3 +14,6 @@ https://youtu.be/suMytEyQTP4
 1. Not all the boards support touchGFX.
 2. Larger projects might not work due to low memory availability.
 3. The code will not work in cubeIDE for now. I will update this later.
+
+
+## You can download the full project from https://drive.google.com/file/d/1-FxMH2yGi-vVDK1OGVwLmmeGrzTMSGod/view?usp=sharing
