@@ -4,3 +4,5 @@
 2. Define the ```64 Bit / 32 Bit Support ```
 
 To watch the implementation, or How I manage to write the library using the datasheet, check out the video
+
+To download the full project for Bluepill, goto https://controllerstech.com/bme280-with-stm32/
