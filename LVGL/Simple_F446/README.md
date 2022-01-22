@@ -1,6 +1,6 @@
 # LVGL and STM32
 
-## Along with the project, you also need to donload the LVGL libray, which can be downladed from https://github.com/lvgl/lvgl.git
+### Along with the project, you also need to download the LVGL libray, which can be downladed from https://github.com/lvgl/lvgl.git
 
 
 To watch the steps of implementation, check out https://youtu.be/X8aEXnSmPUI
