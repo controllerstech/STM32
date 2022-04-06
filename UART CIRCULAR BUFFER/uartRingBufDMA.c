@@ -259,8 +259,8 @@ int getAfter (char *string, uint8_t numberofchars, char *buffertocopyinto, uint3
 	HAL_Delay (100);
 	for (int indx=0; indx<numberofchars; indx++)
 	{
-		if (Tail==MainBuf_SIZE) Tail = 0;
 		buffertocopyinto[indx] = MainBuf[Tail++];  // save the data into the buffer... increments the tail
+		if (Tail==MainBuf_SIZE) Tail = 0;
 	}
 	return 1;
 }
