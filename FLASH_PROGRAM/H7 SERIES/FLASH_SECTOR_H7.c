@@ -214,11 +214,14 @@ uint32_t Flash_Write_Data (uint32_t StartSectorAddress, uint32_t *data, uint16_t
 	  EraseInitStruct.TypeErase     = FLASH_TYPEERASE_SECTORS;
 	  EraseInitStruct.VoltageRange  = FLASH_VOLTAGE_RANGE_3;
 	  EraseInitStruct.Sector        = StartSector;
+    EraseInitStruct.Banks         = FLASH_BANK_1;
 
-	  // The the proper BANK to erase the Sector
-	  if (StartSectorAddress < 0x08100000)
-		  EraseInitStruct.Banks     = FLASH_BANK_1;
-	  else EraseInitStruct.Banks    = FLASH_BANK_2;
+#ifdef DUAL_BANK
+    // The the proper BANK to erase the Sector
+    if (StartSectorAddress >= 0x08100000) {
+      EraseInitStruct.Banks = FLASH_BANK_2;
+    }
+#endif /* DUAL_BANK */
 
 	  EraseInitStruct.NbSectors     = (EndSector - StartSector) + 1;
 
