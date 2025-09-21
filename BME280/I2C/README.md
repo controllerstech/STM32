@@ -5,4 +5,4 @@
 
 To watch the implementation, or How I manage to write the library using the datasheet, check out the video https://youtu.be/jDhkfe2YG_o
 
-To download the full project for Bluepill, goto https://controllerstech.com/bme280-with-stm32/
+To download the full project for Bluepill, goto [https://controllerstech.com/bme280-with-stm32/](https://controllerstech.com/interface-bme280-with-stm32/)
